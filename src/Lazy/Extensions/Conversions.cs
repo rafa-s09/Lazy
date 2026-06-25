@@ -690,6 +690,23 @@ public static class Conversions
         return Convert.FromBase64String(value);
     }
 
+
+    public static string ToBase32(this ulong value)
+    {
+        string Base32Alphabet = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+        Span<char> buffer = stackalloc char[13];
+        int pos = buffer.Length;
+
+        do
+        {
+            buffer[--pos] = Base32Alphabet[(int)(value & 31)];
+            value >>= 5;
+        }
+        while (value != 0);
+
+        return new string(buffer[pos..]);
+    }
+
     #endregion Base64
 
     #region Byte[] To String
@@ -721,16 +738,8 @@ public static class Conversions
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        return encode switch
-        {
-            TextEncode.ASCII => Encoding.ASCII.GetBytes(value),
-            TextEncode.UTF8 => Encoding.UTF8.GetBytes(value),
-            TextEncode.UTF16 => Encoding.BigEndianUnicode.GetBytes(value),
-            TextEncode.UTF32 => Encoding.UTF32.GetBytes(value),
-            TextEncode.Unicode => Encoding.Unicode.GetBytes(value),
-            TextEncode.Latin1 => Encoding.Latin1.GetBytes(value),
-            _ => Encoding.UTF8.GetBytes(value),
-        };
+        Encoding encoding = encode.ToEncoding();
+        return encoding.GetBytes(value);
     }
 
     /// <summary>
@@ -767,17 +776,398 @@ public static class Conversions
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        return encode switch
-        {
-            TextEncode.ASCII => Encoding.ASCII.GetString(value),
-            TextEncode.UTF8 => Encoding.UTF8.GetString(value),
-            TextEncode.UTF16 => Encoding.BigEndianUnicode.GetString(value),
-            TextEncode.UTF32 => Encoding.UTF32.GetString(value),
-            TextEncode.Unicode => Encoding.Unicode.GetString(value),
-            TextEncode.Latin1 => Encoding.Latin1.GetString(value),
-            _ => Encoding.UTF8.GetString(value),
-        };
+        Encoding encoding = encode.ToEncoding();
+        return encoding.GetString(value);
     }
 
     #endregion Byte[] To String
+
+    #region Parses
+
+    #region Signed      
+
+    public static byte ToByteOrDefault(this object? value, byte defaultValue = 0)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is byte i)
+            return i;
+
+        if (value is string s)
+            return byte.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out byte result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToByte(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static short ToShortOrDefault(this object? value, short defaultValue = 0)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is short i)
+            return i;
+
+        if (value is string s)
+            return short.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out short result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToInt16(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static int ToIntOrDefault(this object? value, int defaultValue = 0)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is int i)
+            return i;
+
+        if (value is string s)        
+            return int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out int result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToInt32(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static long ToLongOrDefault(this object? value, long defaultValue = 0)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is long i)
+            return i;
+
+        if (value is string s)
+            return long.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out long result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToInt64(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static float ToFloatOrDefault(this object? value, float defaultValue = 0f)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is float i)
+            return i;
+
+        if (value is string s)
+            return float.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out float result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToSingle(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static double ToDoubleOrDefault(this object? value, double defaultValue = 0.0)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is double i)
+            return i;
+
+        if (value is string s)
+            return double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out double result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToDouble(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static decimal ToDecimalOrDefault(this object? value, decimal defaultValue = 0m)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is decimal i)
+            return i;
+
+        if (value is string s)
+            return decimal.TryParse(s, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToDecimal(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    #endregion Signed
+
+    #region Unsigned
+
+    public static sbyte ToSByteOrDefault(this object? value, sbyte defaultValue = 0)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is sbyte i)
+            return i;
+
+        if (value is string s)
+            return sbyte.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out sbyte result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToSByte(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static ushort ToUShortOrDefault(this object? value, ushort defaultValue = 0)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is ushort i)
+            return i;
+
+        if (value is string s)
+            return ushort.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out ushort result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToUInt16(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static uint ToUIntOrDefault(this object? value, uint defaultValue = 0)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is uint i)
+            return i;
+
+        if (value is string s)
+            return uint.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out uint result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToUInt32(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static ulong ToULongOrDefault(this object? value, ulong defaultValue = 0)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is ulong i)
+            return i;
+
+        if (value is string s)
+            return ulong.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out ulong result) ? result : defaultValue;
+
+        try
+        {
+            return Convert.ToUInt64(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    #endregion Unsigned
+
+    #region Special
+
+    public static bool ToBooleanOrDefault(this object? value, bool defaultValue = false)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is bool i)
+            return i;
+
+        if (value is string s)
+        {
+            if (bool.TryParse(s, out bool result))
+                return result;
+
+            // Extra fallback amigável para padrões comuns de texto em APIs/Bancos de dados
+            return s.Trim().ToLowerInvariant() switch
+            {
+                "1" or "yes" or "y" or "t" => true,
+                "0" or "no" or "n" or "f" => false,
+                _ => defaultValue
+            };
+        }
+
+        try
+        {
+            return Convert.ToBoolean(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static char ToCharOrDefault(this object? value, char defaultValue = '\0')
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is char c)
+            return c;
+
+        if (value is string s && s.Length == 1)
+            return s[0];
+
+        try
+        {
+            return Convert.ToChar(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static string ToStringOrDefault(this object? value, string defaultValue = "")
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is string s)
+            return s;
+
+        try
+        {
+            return Convert.ToString(value, CultureInfo.InvariantCulture) ?? defaultValue;
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static DateTime ToDateTimeOrDefault(this object? value, DateTime defaultValue = default)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is DateTime dt)
+            return dt;
+
+        if (value is string s)        
+            return DateTime.TryParse(s, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result) ? result : defaultValue;        
+
+        try
+        {
+            return Convert.ToDateTime(value, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    public static DateTimeOffset ToDateTimeOffsetOrDefault(this object? value, DateTimeOffset defaultValue = default)
+    {
+        if (value is null)
+            return defaultValue;
+
+        if (value is DateTimeOffset dto)
+            return dto;
+
+        if (value is DateTime dt)
+            return new DateTimeOffset(dt);
+
+        if (value is string s)
+            return DateTimeOffset.TryParse(s, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset result) ? result : defaultValue;
+        
+
+        try
+        {
+            // Convert does not have direct native support for DateTimeOffset, so we map it safely via string/IConvertible.
+            if (value is IConvertible convertible)
+            {
+                string sValue = convertible.ToString(CultureInfo.InvariantCulture);
+                return DateTimeOffset.TryParse(sValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset result) ? result : defaultValue;
+            }
+
+            return defaultValue;
+        }
+        catch
+        {
+            return defaultValue;
+        }
+    }
+
+    #endregion Special
+
+    #endregion Parses
+
+    #region Responsive
+
+    public static Encoding ToEncoding(this TextEncode textEncode)
+    {
+        return textEncode switch
+        {
+            TextEncode.ASCII => Encoding.ASCII,
+            TextEncode.UTF8 => Encoding.UTF8,
+            TextEncode.UTF16 => Encoding.BigEndianUnicode,
+            TextEncode.UTF32 => Encoding.UTF32,
+            TextEncode.Unicode => Encoding.Unicode,
+            TextEncode.Latin1 => Encoding.Latin1,
+            _ => Encoding.UTF8,
+        };
+    }
+
+    #endregion Responsive
 }
