@@ -691,6 +691,16 @@ public static class Conversions
     }
 
 
+    /// <summary>
+    /// Converts a <see cref="ulong"/> to its Base32 string representation.
+    /// </summary>
+    /// <param name="value">The <see cref="ulong"/> value to convert.</param>
+    /// <returns>A Base32 encoded string representing the <see cref="ulong"/> value.</returns>
+    /// <example>
+    /// <code>
+    /// 12345UL.ToBase32(); // e.g. "C5R"
+    /// </code>
+    /// </example>
     public static string ToBase32(this ulong value)
     {
         string Base32Alphabet = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
@@ -786,6 +796,18 @@ public static class Conversions
 
     #region Signed      
 
+    /// <summary>
+    /// Parses the object to a <see cref="byte"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0.</param>
+    /// <returns>The parsed <see cref="byte"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "255".ToByteOrDefault(); // returns 255
+    /// "invalid".ToByteOrDefault(1); // returns 1
+    /// </code>
+    /// </example>
     public static byte ToByteOrDefault(this object? value, byte defaultValue = 0)
     {
         if (value is null)
@@ -807,6 +829,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="short"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0.</param>
+    /// <returns>The parsed <see cref="short"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "32000".ToShortOrDefault(); // returns 32000
+    /// </code>
+    /// </example>
     public static short ToShortOrDefault(this object? value, short defaultValue = 0)
     {
         if (value is null)
@@ -828,6 +861,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to an <see cref="int"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0.</param>
+    /// <returns>The parsed <see cref="int"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "42".ToIntOrDefault(); // returns 42
+    /// </code>
+    /// </example>
     public static int ToIntOrDefault(this object? value, int defaultValue = 0)
     {
         if (value is null)
@@ -849,6 +893,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="long"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0.</param>
+    /// <returns>The parsed <see cref="long"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "10000000000".ToLongOrDefault(); // returns 10000000000
+    /// </code>
+    /// </example>
     public static long ToLongOrDefault(this object? value, long defaultValue = 0)
     {
         if (value is null)
@@ -870,6 +925,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="float"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0f.</param>
+    /// <returns>The parsed <see cref="float"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "3.14".ToFloatOrDefault(); // returns 3.14f
+    /// </code>
+    /// </example>
     public static float ToFloatOrDefault(this object? value, float defaultValue = 0f)
     {
         if (value is null)
@@ -891,6 +957,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="double"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0.0.</param>
+    /// <returns>The parsed <see cref="double"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "2.718".ToDoubleOrDefault(); // returns 2.718
+    /// </code>
+    /// </example>
     public static double ToDoubleOrDefault(this object? value, double defaultValue = 0.0)
     {
         if (value is null)
@@ -912,6 +989,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="decimal"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0m.</param>
+    /// <returns>The parsed <see cref="decimal"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "10.50".ToDecimalOrDefault(); // returns 10.50m
+    /// </code>
+    /// </example>
     public static decimal ToDecimalOrDefault(this object? value, decimal defaultValue = 0m)
     {
         if (value is null)
@@ -937,6 +1025,17 @@ public static class Conversions
 
     #region Unsigned
 
+    /// <summary>
+    /// Parses the object to an <see cref="sbyte"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0.</param>
+    /// <returns>The parsed <see cref="sbyte"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "-5".ToSByteOrDefault(); // returns -5
+    /// </code>
+    /// </example>
     public static sbyte ToSByteOrDefault(this object? value, sbyte defaultValue = 0)
     {
         if (value is null)
@@ -958,6 +1057,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="ushort"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0.</param>
+    /// <returns>The parsed <see cref="ushort"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "65000".ToUShortOrDefault(); // returns 65000
+    /// </code>
+    /// </example>
     public static ushort ToUShortOrDefault(this object? value, ushort defaultValue = 0)
     {
         if (value is null)
@@ -979,6 +1089,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="uint"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0.</param>
+    /// <returns>The parsed <see cref="uint"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "3000000000".ToUIntOrDefault(); // returns 3000000000
+    /// </code>
+    /// </example>
     public static uint ToUIntOrDefault(this object? value, uint defaultValue = 0)
     {
         if (value is null)
@@ -1000,6 +1121,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="ulong"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to 0.</param>
+    /// <returns>The parsed <see cref="ulong"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "10000000000".ToULongOrDefault(); // returns 10000000000
+    /// </code>
+    /// </example>
     public static ulong ToULongOrDefault(this object? value, ulong defaultValue = 0)
     {
         if (value is null)
@@ -1025,6 +1157,18 @@ public static class Conversions
 
     #region Special
 
+    /// <summary>
+    /// Parses the object to a <see cref="bool"/> or returns the specified default value.
+    /// Maps "1", "yes", "y", "t" to true and "0", "no", "n", "f" to false as an extra fallback.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to false.</param>
+    /// <returns>The parsed <see cref="bool"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "yes".ToBooleanOrDefault(); // returns true
+    /// </code>
+    /// </example>
     public static bool ToBooleanOrDefault(this object? value, bool defaultValue = false)
     {
         if (value is null)
@@ -1057,6 +1201,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="char"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to '\0'.</param>
+    /// <returns>The parsed <see cref="char"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "A".ToCharOrDefault(); // returns 'A'
+    /// </code>
+    /// </example>
     public static char ToCharOrDefault(this object? value, char defaultValue = '\0')
     {
         if (value is null)
@@ -1078,6 +1233,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Converts the object to a <see cref="string"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if conversion fails. Defaults to an empty string.</param>
+    /// <returns>The converted <see cref="string"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// ((object)null).ToStringOrDefault("fallback"); // returns "fallback"
+    /// </code>
+    /// </example>
     public static string ToStringOrDefault(this object? value, string defaultValue = "")
     {
         if (value is null)
@@ -1096,6 +1262,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="DateTime"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to default(DateTime).</param>
+    /// <returns>The parsed <see cref="DateTime"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "2024-01-01".ToDateTimeOrDefault(); // returns a parsed DateTime
+    /// </code>
+    /// </example>
     public static DateTime ToDateTimeOrDefault(this object? value, DateTime defaultValue = default)
     {
         if (value is null)
@@ -1117,6 +1294,17 @@ public static class Conversions
         }
     }
 
+    /// <summary>
+    /// Parses the object to a <see cref="DateTimeOffset"/> or returns the specified default value.
+    /// </summary>
+    /// <param name="value">The object to parse.</param>
+    /// <param name="defaultValue">The value to return if parsing fails. Defaults to default(DateTimeOffset).</param>
+    /// <returns>The parsed <see cref="DateTimeOffset"/> or the default value.</returns>
+    /// <example>
+    /// <code>
+    /// "2024-01-01T00:00:00Z".ToDateTimeOffsetOrDefault(); // returns a parsed DateTimeOffset
+    /// </code>
+    /// </example>
     public static DateTimeOffset ToDateTimeOffsetOrDefault(this object? value, DateTimeOffset defaultValue = default)
     {
         if (value is null)
@@ -1155,6 +1343,16 @@ public static class Conversions
 
     #region Responsive
 
+    /// <summary>
+    /// Maps a <see cref="TextEncode"/> enum to the corresponding <see cref="Encoding"/> instance.
+    /// </summary>
+    /// <param name="textEncode">The text encode value to convert.</param>
+    /// <returns>An <see cref="Encoding"/> representing the given TextEncode.</returns>
+    /// <example>
+    /// <code>
+    /// TextEncode.UTF8.ToEncoding(); // returns Encoding.UTF8
+    /// </code>
+    /// </example>
     public static Encoding ToEncoding(this TextEncode textEncode)
     {
         return textEncode switch

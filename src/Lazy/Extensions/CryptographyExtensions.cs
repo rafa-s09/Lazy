@@ -4,6 +4,18 @@ public static class CryptographyExtensions
 {
     #region Checksums 
 
+    /// <summary>
+    /// Computes the CRC32 checksum of the specified string.
+    /// </summary>
+    /// <param name="value">The string to compute the checksum for.</param>
+    /// <param name="tencode">The text encoding to use. Defaults to <see cref="TextEncode.UTF8"/>.</param>
+    /// <returns>The CRC32 checksum as a <see cref="uint"/>, or 0 if the string is empty.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// "hello".ToCrc32();
+    /// </code>
+    /// </example>
     public static uint ToCrc32(this string value, TextEncode tencode = TextEncode.UTF8)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -28,6 +40,18 @@ public static class CryptographyExtensions
         }
     }
 
+    /// <summary>
+    /// Computes the CRC64 checksum of the specified string.
+    /// </summary>
+    /// <param name="value">The string to compute the checksum for.</param>
+    /// <param name="tencode">The text encoding to use. Defaults to <see cref="TextEncode.UTF8"/>.</param>
+    /// <returns>The CRC64 checksum as a <see cref="ulong"/>, or 0 if the string is empty.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// "hello".ToCrc64();
+    /// </code>
+    /// </example>
     public static ulong ToCrc64(this string value, TextEncode tencode = TextEncode.UTF8)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -52,6 +76,18 @@ public static class CryptographyExtensions
         }
     }
 
+    /// <summary>
+    /// Computes the XxHash32 hash of the specified string.
+    /// </summary>
+    /// <param name="value">The string to compute the hash for.</param>
+    /// <param name="tencode">The text encoding to use. Defaults to <see cref="TextEncode.UTF8"/>.</param>
+    /// <returns>The XxHash32 as a <see cref="uint"/>, or 0 if the string is empty.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// "hello".ToXxHash32();
+    /// </code>
+    /// </example>
     public static uint ToXxHash32(this string value, TextEncode tencode = TextEncode.UTF8)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -76,6 +112,18 @@ public static class CryptographyExtensions
         }
     }
 
+    /// <summary>
+    /// Computes the XxHash64 hash of the specified string.
+    /// </summary>
+    /// <param name="value">The string to compute the hash for.</param>
+    /// <param name="tencode">The text encoding to use. Defaults to <see cref="TextEncode.UTF8"/>.</param>
+    /// <returns>The XxHash64 as a <see cref="ulong"/>, or 0 if the string is empty.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// "hello".ToXxHash64();
+    /// </code>
+    /// </example>
     public static ulong ToXxHash64(this string value, TextEncode tencode = TextEncode.UTF8)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -100,6 +148,18 @@ public static class CryptographyExtensions
         }
     }
 
+    /// <summary>
+    /// Computes the XxHash128 hash of the specified string.
+    /// </summary>
+    /// <param name="value">The string to compute the hash for.</param>
+    /// <param name="tencode">The text encoding to use. Defaults to <see cref="TextEncode.UTF8"/>.</param>
+    /// <returns>The XxHash128 as a <see cref="UInt128"/>, or 0 if the string is empty.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// "hello".ToXxHash128();
+    /// </code>
+    /// </example>
     public static UInt128 ToXxHash128(this string value, TextEncode tencode = TextEncode.UTF8)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -124,6 +184,18 @@ public static class CryptographyExtensions
         }
     }
 
+    /// <summary>
+    /// Computes the XxHash3 hash of the specified string.
+    /// </summary>
+    /// <param name="value">The string to compute the hash for.</param>
+    /// <param name="tencode">The text encoding to use. Defaults to <see cref="TextEncode.UTF8"/>.</param>
+    /// <returns>The XxHash3 as a <see cref="ulong"/>, or 0 if the string is empty.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// "hello".ToXxHash3();
+    /// </code>
+    /// </example>
     public static ulong ToXxHash3(this string value, TextEncode tencode = TextEncode.UTF8)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -148,6 +220,18 @@ public static class CryptographyExtensions
         }
     }
 
+    /// <summary>
+    /// Computes the XxHash3 hash of the specified string and returns it as a string.
+    /// </summary>
+    /// <param name="value">The string to compute the hash for.</param>
+    /// <param name="tencode">The text encoding to use. Defaults to <see cref="TextEncode.UTF8"/>.</param>
+    /// <returns>The XxHash3 hash as a string, or an empty string if the input is empty.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// "hello".ToXxHash3String();
+    /// </code>
+    /// </example>
     public static string ToXxHash3String(this string value, TextEncode tencode = TextEncode.UTF8)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -172,6 +256,18 @@ public static class CryptographyExtensions
         }
     }
 
+    /// <summary>
+    /// Computes the MD5 hash of the specified string.
+    /// </summary>
+    /// <param name="value">The string to compute the hash for.</param>
+    /// <param name="tencode">The text encoding to use. Defaults to <see cref="TextEncode.UTF8"/>.</param>
+    /// <returns>The MD5 hash as a lowercase hexadecimal string, or an empty string if the input is empty.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// "hello".ToMd5();
+    /// </code>
+    /// </example>
     public static string ToMd5(this string value, TextEncode tencode = TextEncode.UTF8)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -198,6 +294,18 @@ public static class CryptographyExtensions
         }
     }
 
+    /// <summary>
+    /// Computes the SHA-256 hash of the specified string.
+    /// </summary>
+    /// <param name="value">The string to compute the hash for.</param>
+    /// <param name="tencode">The text encoding to use. Defaults to <see cref="TextEncode.UTF8"/>.</param>
+    /// <returns>The SHA-256 hash as a lowercase hexadecimal string, or an empty string if the input is empty.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// "hello".ToSha256();
+    /// </code>
+    /// </example>
     public static string ToSha256(this string value, TextEncode tencode = TextEncode.UTF8)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -226,12 +334,32 @@ public static class CryptographyExtensions
         }
     }
 
+    /// <summary>
+    /// Computes a Base32 encoded TagHash using XxHash64 for the specified string.
+    /// </summary>
+    /// <param name="value">The string to compute the tag hash for.</param>
+    /// <returns>The tag hash as a Base32 string.</returns>
+    /// <example>
+    /// <code>
+    /// "hello".ToTagHash();
+    /// </code>
+    /// </example>
     public static string ToTagHash(this string value)
     {
         ulong hash = value.ToXxHash64();
         return hash.ToBase32(); 
     }
 
+    /// <summary>
+    /// Computes a formatted TaggedHash using a sanitized prefix of the string and its TagHash.
+    /// </summary>
+    /// <param name="value">The string to compute the tagged hash for.</param>
+    /// <returns>A formatted string combining the sanitized value and its tag hash.</returns>
+    /// <example>
+    /// <code>
+    /// "hello world".ToTaggedHash(); // e.g., "HELLO-WORLD-[Hash]"
+    /// </code>
+    /// </example>
     public static string ToTaggedHash(this string value)
     {
         string tag = value.Sanitize().ToUpperInvariant().Replace(' ', '-');
@@ -242,6 +370,20 @@ public static class CryptographyExtensions
 
     #region Generative
 
+    /// <summary>
+    /// Generates a random cryptographic token of the specified length using the allowed characters.
+    /// </summary>
+    /// <param name="length">The length of the token to generate.</param>
+    /// <param name="allowedChars">The allowed characters to use. Defaults to alphanumeric characters.</param>
+    /// <returns>A cryptographically secure random string token.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is less than or equal to zero.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="allowedChars"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="allowedChars"/> is an empty string.</exception>
+    /// <example>
+    /// <code>
+    /// CryptographyExtensions.GenerateRandomToken(16);
+    /// </code>
+    /// </example>
     public static string GenerateRandomToken(int length, string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(length);
@@ -263,6 +405,15 @@ public static class CryptographyExtensions
         });
     }
 
+    /// <summary>
+    /// Generates a short, URL-safe unique identifier based on a newly generated Guid.
+    /// </summary>
+    /// <returns>A 22-character unique URL-safe string.</returns>
+    /// <example>
+    /// <code>
+    /// CryptographyExtensions.GenerateShortId();
+    /// </code>
+    /// </example>
     public static string GenerateShortId()
     {
         Guid guid = Guid.NewGuid();
