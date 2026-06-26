@@ -129,7 +129,7 @@ public class StringExtensionsTests
     [Fact]
     public void IsNullOrBlank_ReturnsCorrectly()
     {
-        Assert.True(((string)null).IsNullOrBlank());
+        Assert.True((null as string).IsNullOrBlank());
         Assert.True("".IsNullOrBlank());
         Assert.True("   ".IsNullOrBlank());
         Assert.False("test".IsNullOrBlank());

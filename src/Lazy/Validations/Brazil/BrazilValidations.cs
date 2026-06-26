@@ -42,7 +42,7 @@ public static partial class Validations
     /// </remarks>
     /// <param name="cpf">The raw CPF string to evaluate, which may include structural punctuation marks.</param>
     /// <returns>True if the document contains a valid length, represents a non-repeating sequence, and satisfies both verification digit formulas; otherwise, false.</returns>
-    public static bool ValidCPF(this string cpf)
+    public static bool ValidCPF(string cpf)
     {
         if (string.IsNullOrEmpty(cpf))
             return false;

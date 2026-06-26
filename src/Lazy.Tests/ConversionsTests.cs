@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 using System.Xml;
@@ -154,7 +155,7 @@ public class ConversionsTests
         Assert.Equal('B', "invalid".ToCharOrDefault('B'));
 
         Assert.Equal("test", "test".ToStringOrDefault());
-        Assert.Equal("fallback", ((object)null).ToStringOrDefault("fallback"));
+        Assert.Equal("fallback", (null as object).ToStringOrDefault("fallback"));
 
         DateTime dt = new DateTime(2024, 1, 1);
         Assert.Equal(dt, "2024-01-01".ToDateTimeOrDefault());

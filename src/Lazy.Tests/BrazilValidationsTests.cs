@@ -9,7 +9,7 @@ public class BrazilValidationsTests
     [InlineData("111.444.777-35")] // Valid formatted CPF
     public void ValidCPF_ReturnsTrueForValid(string cpf)
     {
-        Assert.True(cpf.ValidCPF());
+        Assert.True(Validations.Brazil.Validations.ValidCPF(cpf));
     }
 
     [Theory]
@@ -20,7 +20,7 @@ public class BrazilValidationsTests
     [InlineData("111.444.777-36")] // Invalid digit
     public void ValidCPF_ReturnsFalseForInvalid(string cpf)
     {
-        Assert.False(cpf == null ? Lazy.Validations.Brazil.Validations.ValidCPF(string.Empty) : cpf.ValidCPF());
+        Assert.False(cpf == null ? Lazy.Validations.Brazil.Validations.ValidCPF(string.Empty) : Validations.Brazil.Validations.ValidCPF(cpf));
     }
 
     [Theory]

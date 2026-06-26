@@ -47,8 +47,9 @@ public static class Conversions
     /// </example>
     public static TEnum ToEnum<TEnum>(this int value, bool fallbackToFirst = false) where TEnum : struct, Enum
     {
-        if (Enum.IsDefined(typeof(TEnum), value))
-            return (TEnum)(object)value;
+        TEnum candidate = (TEnum)(object)value;
+        if (Enum.IsDefined(candidate))
+            return candidate;
 
         if (fallbackToFirst)
         {
@@ -107,8 +108,9 @@ public static class Conversions
     /// </example>
     public static TEnum ToEnum<TEnum>(this byte value, bool fallbackToFirst = false) where TEnum : struct, Enum
     {
-        if (Enum.IsDefined(typeof(TEnum), value))
-            return (TEnum)(object)value;
+        TEnum candidate = (TEnum)(object)value;
+        if (Enum.IsDefined(candidate))
+            return candidate;
 
         if (fallbackToFirst)
         {

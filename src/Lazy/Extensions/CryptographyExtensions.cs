@@ -325,7 +325,7 @@ public static class CryptographyExtensions
         {
             encoding.GetBytes(value, inputBuffer);
             SHA256.HashData(inputBuffer, hashBuffer);
-            return Convert.ToHexString(hashBuffer).ToLowerInvariant();
+            return Convert.ToHexStringLower(hashBuffer);
         }
         finally
         {
@@ -392,17 +392,28 @@ public static class CryptographyExtensions
         if (allowedChars.Length == 0)
             throw new ArgumentException("Allowed characters string cannot be empty.", nameof(allowedChars));
 
-        return string.Create(length, (allowedChars, length), static (span, state) =>
-        {
-            Span<byte> randomBytes = stackalloc byte[state.length];
-            RandomNumberGenerator.Fill(randomBytes);
+        byte[]? rentedBytes = null;
+        char[]? rentedChars = null;
 
-            for (int i = 0; i < span.Length; i++)
-            {
-                int charIndex = randomBytes[i] % state.allowedChars.Length;
-                span[i] = state.allowedChars[charIndex];
-            }
-        });
+        try
+        {
+            Span<byte> randomBytes = length <= 512 ? stackalloc byte[length] : (rentedBytes = ArrayPool<byte>.Shared.Rent(length));
+            Span<char> result = length <= 512 ? stackalloc char[length] : (rentedChars = ArrayPool<char>.Shared.Rent(length));
+            RandomNumberGenerator.Fill(randomBytes[..length]);
+
+            for (int i = 0; i < length; i++)
+                result[i] = allowedChars[randomBytes[i] % allowedChars.Length];
+
+            return new string(result[..length]);
+        }
+        finally
+        {
+            if (rentedBytes is not null) 
+                ArrayPool<byte>.Shared.Return(rentedBytes);
+
+            if (rentedChars is not null) 
+                ArrayPool<char>.Shared.Return(rentedChars);
+        }
     }
 
     /// <summary>
