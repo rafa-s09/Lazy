@@ -1,9 +1,5 @@
 namespace Lazy.Buffer;
 
-using System;
-using System.Buffers;
-using System.Collections.Generic;
-
 /// <summary>
 /// A high-performance, allocation-free circular buffer list that operates on <see cref="Span{T}"/>.
 /// It supports operations like append, insert, remove, update, and search, designed to minimize GC allocations.
@@ -21,7 +17,7 @@ using System.Collections.Generic;
 public ref struct BufferList<T> where T : unmanaged
 {
     private Span<T> _buffer;
-    private Span<bool> _hasValue; // Controla se o slot está preenchido ou "vazio" (Release)
+    private Span<bool> _hasValue; 
     private int _head;
     private int _tail;
     private int _count;
@@ -67,7 +63,7 @@ public ref struct BufferList<T> where T : unmanaged
 
         _buffer = buffer;
         _hasValue = validationBuffer;
-        _hasValue.Clear(); // Garante que começa tudo vazio
+        _hasValue.Clear(); 
         _head = 0;
         _tail = 0;
         _count = 0;
@@ -466,7 +462,6 @@ public ref struct BufferList<T> where T : unmanaged
     /// </example>
     public void Sort(Comparison<T> comparison)
     {
-        // Para ordenar um buffer circular sem corromper a lógica, primeiro linearizamos os dados válidos
         Organize();
         _buffer[.._count].Sort(comparison);
     }
@@ -594,7 +589,7 @@ public ref struct BufferList<T> where T : unmanaged
     {
         if (newSize <= _maxAllowedSize) return;
 
-        Organize(); // Garante dados lineares antes de mover
+        Organize(); 
         _buffer[.._count].CopyTo(newBuffer);
         _hasValue[.._count].CopyTo(newValidation);
 
@@ -629,7 +624,6 @@ public ref struct BufferList<T> where T : unmanaged
     /// </example>
     public readonly List<T> ToList()
     {
-        // Aloca a lista diretamente com a capacidade exata
         var list = new List<T>(_count);
         for (int i = 0; i < _count; i++)
         {
