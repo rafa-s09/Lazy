@@ -1,5 +1,9 @@
 namespace Lazy.Buffer;
 
+using System;
+using System.Buffers;
+using System.Collections.Generic;
+
 /// <summary>
 /// A high-performance, allocation-free circular buffer list that operates on <see cref="Span{T}"/>.
 /// It supports operations like append, insert, remove, update, and search, designed to minimize GC allocations.
@@ -83,6 +87,7 @@ public ref struct BufferList<T> where T : unmanaged
     {
         if (IsFull)
         {
+            // Estratégia de rotação: avança o head descartando o antigo
             _hasValue[_head] = false;
             _head = (_head + 1) % _maxAllowedSize;
             _count--;
