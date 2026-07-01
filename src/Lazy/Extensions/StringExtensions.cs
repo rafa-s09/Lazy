@@ -868,6 +868,189 @@ public static partial class StringExtensions
         return false;
     }
 
+    public static string ExtractLetters(this string text, bool replaceWithSpace = false)
+    {
+        if (string.IsNullOrEmpty(text))
+            return string.Empty;
+
+        ReadOnlySpan<char> span = text.AsSpan();
+        StringBuilder sb = new StringBuilder(span.Length);
+
+        foreach (var c in span)
+        {
+            if (char.IsLetter(c))
+                sb.Append(c);
+            else if (replaceWithSpace)
+                sb.Append(' ');
+        }
+
+        return sb.ToString();
+    }
+
+    public static string ExtractNumbers(this string text, bool replaceWithSpace = false)
+    {
+        if (string.IsNullOrEmpty(text))
+            return string.Empty;
+
+        ReadOnlySpan<char> span = text.AsSpan();
+        StringBuilder sb = new StringBuilder(span.Length);
+        foreach (var c in span)
+        {
+            if (char.IsDigit(c))
+                sb.Append(c);
+            else if (replaceWithSpace)
+                sb.Append(' ');
+        }
+
+        return sb.ToString();
+    }    
+
+    public static bool TryParseNumbers(this string text, out byte result)
+    {
+        return TryParseNumbersInternal(text, out result);
+    }
+
+    public static bool TryParseNumbers(this string text, out short result)
+    {
+        return TryParseNumbersInternal(text, out result);
+    }
+
+    public static bool TryParseNumbers(this string text, out int result)
+    {
+        return TryParseNumbersInternal(text, out result);
+    }
+
+    public static bool TryParseNumbers(this string text, out long result)
+    {
+        return TryParseNumbersInternal(text, out result);
+    }
+
+    public static bool TryParseNumbers(this string text, out sbyte result)
+    {
+        return TryParseNumbersInternal(text, out result);
+    }
+
+    public static bool TryParseNumbers(this string text, out ushort result)
+    {
+        return TryParseNumbersInternal(text, out result);
+    }
+
+    public static bool TryParseNumbers(this string text, out uint result)
+    {
+        return TryParseNumbersInternal(text, out result);
+    }
+
+    public static bool TryParseNumbers(this string text, out ulong result)
+    {
+        return TryParseNumbersInternal(text, out result);
+    }
+
+    public static bool TryParseFloat(this string text, out float result)
+    {
+        result = 0f;
+        if (string.IsNullOrEmpty(text))
+            return false;
+
+        ReadOnlySpan<char> span = text.AsSpan();
+        Span<char> buffer = span.Length <= 128 ? stackalloc char[span.Length] : new char[span.Length];
+        int bufferIndex = 0;
+        bool decimalFound = false;
+
+        foreach (char c in span)
+        {
+            if (char.IsDigit(c))
+            {
+                buffer[bufferIndex++] = c;
+            }
+            else if ((c == ',' || c == '.') && !decimalFound)
+            {
+                buffer[bufferIndex++] = '.'; // normaliza para ponto
+                decimalFound = true;
+            }
+            else
+            {
+                // Se já encontrou um separador decimal antes, ignora o resto
+                if (decimalFound)
+                    break;
+            }
+        }
+
+        if (bufferIndex == 0)
+            return false;
+
+        return float.TryParse(buffer[..bufferIndex], NumberStyles.Float, CultureInfo.InvariantCulture, out result);
+    }
+
+    public static bool TryParseDouble(this string text, out double result)
+    {
+        result = 0d;
+        if (string.IsNullOrEmpty(text))
+            return false;
+
+        ReadOnlySpan<char> span = text.AsSpan();
+        Span<char> buffer = span.Length <= 256 ? stackalloc char[span.Length] : new char[span.Length];
+        int bufferIndex = 0;
+        bool decimalFound = false;
+
+        foreach (char c in span)
+        {
+            if (char.IsDigit(c))
+            {
+                buffer[bufferIndex++] = c;
+            }
+            else if ((c == ',' || c == '.') && !decimalFound)
+            {
+                buffer[bufferIndex++] = '.';
+                decimalFound = true;
+            }
+            else
+            {
+                if (decimalFound)
+                    break;
+            }
+        }
+
+        if (bufferIndex == 0)
+            return false;
+
+        return double.TryParse(buffer[..bufferIndex], NumberStyles.Float, CultureInfo.InvariantCulture, out result);
+    }
+
+    public static bool TryParseDecimal(this string text, out decimal result)
+    {
+        result = 0m;
+        if (string.IsNullOrEmpty(text))
+            return false;
+
+        ReadOnlySpan<char> span = text.AsSpan();
+        Span<char> buffer = span.Length <= 256 ? stackalloc char[span.Length] : new char[span.Length];
+        int bufferIndex = 0;
+        bool decimalFound = false;
+
+        foreach (char c in span)
+        {
+            if (char.IsDigit(c))
+            {
+                buffer[bufferIndex++] = c;
+            }
+            else if ((c == ',' || c == '.') && !decimalFound)
+            {
+                buffer[bufferIndex++] = '.';
+                decimalFound = true;
+            }
+            else
+            {
+                if (decimalFound)
+                    break;
+            }
+        }
+
+        if (bufferIndex == 0)
+            return false;
+
+        return decimal.TryParse(buffer[..bufferIndex], NumberStyles.Float, CultureInfo.InvariantCulture, out result);
+    }
+
     #endregion Get and Contains
 
     #region Comparisons
@@ -945,7 +1128,7 @@ public static partial class StringExtensions
     /// "hi".IsNullOrBlank();  // false
     /// </code>
     /// </example>
-    public static bool IsNullOrBlank(this string? text) => string.IsNullOrWhiteSpace(text); 
+    public static bool IsNullOrBlank(this string? text) => string.IsNullOrWhiteSpace(text);
 
     /// <summary>
     /// Analyzes the memory segment to determine whether every single character in the sequence is identical.
@@ -1380,4 +1563,30 @@ public static partial class StringExtensions
     }
 
     #endregion Modifiers
+
+    #region Private
+
+    private static bool TryParseNumbersInternal<T>(string text, out T result) where T : struct
+    {
+        result = default!;
+        if (string.IsNullOrEmpty(text))
+            return false;
+
+        ReadOnlySpan<char> span = text.AsSpan();
+        Span<char> buffer = span.Length <= 128 ? stackalloc char[span.Length] : new char[span.Length];
+        int bufferIndex = 0;
+        foreach (var c in span)
+        {
+            if (char.IsDigit(c))
+                buffer[bufferIndex++] = c;
+        }
+
+        if (bufferIndex == 0)
+            return false;
+
+        ReadOnlySpan<char> numberSpan = buffer[..bufferIndex];
+        return typeof(T) == typeof(int) ? int.TryParse(numberSpan, out Unsafe.As<T, int>(ref result)) : long.TryParse(numberSpan, out Unsafe.As<T, long>(ref result));
+    }
+
+    #endregion Private
 }
