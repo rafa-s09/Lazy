@@ -21,6 +21,12 @@ public static partial class Validations
     private static partial Regex CNPJRegex();
 
     /// <summary>
+    /// Regular expression used to validate that an alphanumeric CNPJ contains exactly 14 alphanumeric characters after symbol stripping.
+    /// </summary>
+    [GeneratedRegex(@"^[A-Z0-9]{14}$")]
+    private static partial Regex CNPJAlphanumericRegex();
+
+    /// <summary>
     /// Regular expression used to validate that a PIS contains exactly 11 digits after symbol stripping.
     /// </summary>
     [GeneratedRegex(@"^\d{11}$")]
@@ -41,7 +47,7 @@ public static partial class Validations
     /// Checksum verification processes the numerical arrays using arithmetic character conversions by subtracting the constant character zero from each index.
     /// </remarks>
     /// <param name="cpf">The raw CPF string to evaluate, which may include structural punctuation marks.</param>
-    /// <returns>True if the document contains a valid length, represents a non-repeating sequence, and satisfies both verification digit formulas; otherwise, false.</returns>
+    /// <returns>True if the document contains a valid length, represents a non-repeating sequence, and satisfies both verification digit formulas; otherwise, false.</returns>    
     public static bool ValidCPF(string cpf)
     {
         if (string.IsNullOrEmpty(cpf))
@@ -81,6 +87,7 @@ public static partial class Validations
         return (span[10] - '0') == digit2;
     }
 
+
     /// <summary>
     /// Validates a CNPJ (Brazilian National Registry of Legal Entities number) using a high-performance checksum algorithm.
     /// </summary>
@@ -92,6 +99,7 @@ public static partial class Validations
     /// </remarks>
     /// <param name="cnpj">The corporate CNPJ string to validate, which may include dashes, dots, or slashes.</param>
     /// <returns>True if the cleansed corporate identifier meets all regex requirements, contains variant digits, and matches both structural validation checks; otherwise, false.</returns>
+    [Obsolete("Use ValidCNPJAlphanumeric instead.")]
     public static bool ValidCNPJ(string cnpj)
     {
         if (string.IsNullOrEmpty(cnpj))
@@ -124,6 +132,55 @@ public static partial class Validations
 
         for (int i = 0; i < 13; i++)
             sum += (span[i] - '0') * multipliers2[i];
+
+        remainder = sum % 11;
+        int digit2 = remainder < 2 ? 0 : 11 - remainder;
+
+        return (span[13] - '0') == digit2;
+    }
+
+    /// <summary>
+    /// Validates an alphanumeric CNPJ (Brazilian National Registry of Legal Entities - New Format) using a high-performance checksum algorithm.
+    /// </summary>
+    /// <remarks>
+    /// The validation pipeline clears formatting symbols, forces uppercase tracking, and checks constraints against CNPJAlphanumericRegex.
+    /// Arithmetic parsing converts characters using their ASCII decimal codes subtracted by 48, making it backwards compatible with purely numeric CNPJs.
+    /// Verification uses two loops against structural weighted arrays to validate the terminal verification digits.
+    /// </remarks>
+    /// <param name="cnpjAlphanumeric">The corporate alphanumeric CNPJ string to validate, which may include formatting marks.</param>
+    /// <returns>True if the cleansed alphanumeric identifier matches regex standards and passes both verification checksum checks; otherwise, false.</returns>
+    public static bool ValidCNPJAlphanumeric(string cnpjAlphanumeric)
+    {
+        if (string.IsNullOrEmpty(cnpjAlphanumeric))
+            return false;
+
+        string cleanCnpj = cnpjAlphanumeric.RemoveNonAlphanumeric().ToUpperInvariant();
+
+        if (cleanCnpj.Length != 14 || !CNPJAlphanumericRegex().IsMatch(cleanCnpj))
+            return false;
+
+        ReadOnlySpan<char> span = cleanCnpj.AsSpan();
+
+        if (span.IsAllSameDigits())
+            return false;
+
+        int[] multipliers1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+        int sum = 0;
+
+        for (int i = 0; i < 12; i++)
+            sum += (span[i] - 48) * multipliers1[i];
+
+        int remainder = sum % 11;
+        int digit1 = remainder < 2 ? 0 : 11 - remainder;
+
+        if ((span[12] - '0') != digit1)
+            return false;
+
+        int[] multipliers2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+        sum = 0;
+
+        for (int i = 0; i < 13; i++)
+            sum += (span[i] - 48) * multipliers2[i];
 
         remainder = sum % 11;
         int digit2 = remainder < 2 ? 0 : 11 - remainder;
