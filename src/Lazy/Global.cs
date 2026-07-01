@@ -11,12 +11,16 @@ global using System.Xml;
 global using System.Xml.Serialization;
 global using System.Security.Cryptography;
 global using System.Runtime.CompilerServices;
+global using System.ComponentModel.DataAnnotations;
 
 #endregion System
 
 #region Lazy
 
 global using Lazy.Extensions;
+global using Lazy.Validations.Brazil;
+global using Lazy.Annotations.Brazil;
+global using Lazy.Buffer;
 
 #endregion Lazy
 

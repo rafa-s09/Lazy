@@ -91,6 +91,9 @@ public static partial class Validations
     /// <summary>
     /// Validates a CNPJ (Brazilian National Registry of Legal Entities number) using a high-performance checksum algorithm.
     /// </summary>
+    /// <deprecated>
+    /// Obsolete. Use <see cref="ValidCNPJAlphanumeric"/> instead to support modern alphanumeric formats.
+    /// </deprecated>
     /// <remarks>
     /// The validation pipeline clears layout formatting and enforces a strict fourteen-digit constraint via the compiled CNPJRegex.
     /// It guards against logical fraudulent entries by running an equality loop across all characters within the input segment.
@@ -226,4 +229,64 @@ public static partial class Validations
     }
 
     #endregion Validates
+
+    #region Validates Aliases
+
+    /// <summary>
+    /// Validates a CPF (Brazilian individual taxpayer registry identification number) using a high-performance checksum algorithm.
+    /// </summary>
+    /// <remarks>
+    /// The input string is first sanitized using ClearSymbols to strip dots, dashes, and other formatting characters.
+    /// If the clean text length is not exactly eleven characters or contains non-numeric symbols, validation fails immediately.
+    /// To block false positives from common test data, uniform digit sequences such as all zeros or all ones are explicitly rejected.
+    /// The algorithm uses a stack-allocated ReadOnlySpan to inspect individual character data without invoking substring allocations.
+    /// Checksum verification processes the numerical arrays using arithmetic character conversions by subtracting the constant character zero from each index.
+    /// </remarks>
+    /// <param name="cpf">The raw CPF string to evaluate, which may include structural punctuation marks.</param>
+    /// <returns>True if the document contains a valid length, represents a non-repeating sequence, and satisfies both verification digit formulas; otherwise, false.</returns>   
+    public static bool IsValidCpf(this string cpf) => ValidCPF(cpf);
+
+    /// <summary>
+    /// Validates a CNPJ (Brazilian National Registry of Legal Entities number) using a high-performance checksum algorithm.
+    /// </summary>
+    /// <deprecated>
+    /// Obsolete. Use <see cref="IsValidCnpjAlphanumeric"/> instead to support modern alphanumeric formats.
+    /// </deprecated>
+    /// <remarks>
+    /// The validation pipeline clears layout formatting and enforces a strict fourteen-digit constraint via the compiled CNPJRegex.
+    /// It guards against logical fraudulent entries by running an equality loop across all characters within the input segment.
+    /// Arithmetic parsing converts individual characters to integers by applying an unmanaged character offset subtraction method.
+    /// Verification uses two sequential loops against distinct weighted arrays to validate the structural terminal digits.
+    /// </remarks>
+    /// <param name="cnpj">The corporate CNPJ string to validate, which may include dashes, dots, or slashes.</param>
+    /// <returns>True if the cleansed corporate identifier meets all regex requirements, contains variant digits, and matches both structural validation checks; otherwise, false.</returns>
+    [Obsolete("Use IsValidCNPJAlphanumeric instead.")]
+    public static bool IsValidCnpj(this string cnpj) => ValidCNPJ(cnpj);
+
+
+    /// <summary>
+    /// Validates an alphanumeric CNPJ (Brazilian National Registry of Legal Entities - New Format) using a high-performance checksum algorithm.
+    /// </summary>
+    /// <remarks>
+    /// The validation pipeline clears formatting symbols, forces uppercase tracking, and checks constraints against CNPJAlphanumericRegex.
+    /// Arithmetic parsing converts characters using their ASCII decimal codes subtracted by 48, making it backwards compatible with purely numeric CNPJs.
+    /// Verification uses two loops against structural weighted arrays to validate the terminal verification digits.
+    /// </remarks>
+    /// <param name="cnpjAlphanumeric">The corporate alphanumeric CNPJ string to validate, which may include formatting marks.</param>
+    /// <returns>True if the cleansed alphanumeric identifier matches regex standards and passes both verification checksum checks; otherwise, false.</returns>
+    public static bool IsValidCnpjAlphanumeric(this string cnpjAlphanumeric) => ValidCNPJAlphanumeric(cnpjAlphanumeric);
+
+    /// <summary>
+    /// Validates a PIS (Brazilian Social Integration Program number) using an optimized single-digit checksum calculation.
+    /// </summary>
+    /// <remarks>
+    /// The string is filtered of structural characters and checked against the compiled PISRegex for an exact eleven-digit match.
+    /// Repetitive sequences are rejected through a uniform digit validation helper before computing the checksum.
+    /// Modulo eleven arithmetic translates the initial ten digits through specific multiplier weights to verify the final digit.
+    /// </remarks>
+    /// <param name="pis">The social registration PIS string to evaluate, which can include dashes and dots.</param>
+    /// <returns>True if the string forms a valid document format, bypasses uniformity checks, and maps precisely to the calculated terminal verification digit; otherwise, false.</returns>
+    public static bool IsValidPis(this string pis) => ValidPIS(pis);
+
+    #endregion Validates Aliases
 }
