@@ -868,6 +868,21 @@ public static partial class StringExtensions
         return false;
     }
 
+    /// <summary>
+    /// Extracts only the alphabetic Unicode letters from the string, optionally replacing any other characters with a space.
+    /// </summary>
+    /// <param name="text">The source string to process.</param>
+    /// <param name="replaceWithSpace">
+    /// When <see langword="true"/>, non-letter characters are replaced with a space. 
+    /// When <see langword="false"/> (default), they are discarded entirely.
+    /// </param>
+    /// <returns>A new string containing only letters, or letters with spaces depending on <paramref name="replaceWithSpace"/>.</returns>
+    /// <example>
+    /// <code>
+    /// "SP_1234X".ExtractLetters();                      // returns "SPX"
+    /// "SP_1234X".ExtractLetters(replaceWithSpace: true); // returns "SP     X"
+    /// </code>
+    /// </example>
     public static string ExtractLetters(this string text, bool replaceWithSpace = false)
     {
         if (string.IsNullOrEmpty(text))
@@ -887,6 +902,21 @@ public static partial class StringExtensions
         return sb.ToString();
     }
 
+    /// <summary>
+    /// Extracts only the numeric digits from the string, optionally replacing any other characters with a space.
+    /// </summary>
+    /// <param name="text">The source string to process.</param>
+    /// <param name="replaceWithSpace">
+    /// When <see langword="true"/>, non-digit characters are replaced with a space. 
+    /// When <see langword="false"/> (default), they are discarded entirely.
+    /// </param>
+    /// <returns>A new string containing only numbers, or numbers with spaces depending on <paramref name="replaceWithSpace"/>.</returns>
+    /// <example>
+    /// <code>
+    /// "SP_1234X".ExtractNumbers();                      // returns "1234"
+    /// "SP_1234X".ExtractNumbers(replaceWithSpace: true); // returns "   1234 "
+    /// </code>
+    /// </example>
     public static string ExtractNumbers(this string text, bool replaceWithSpace = false)
     {
         if (string.IsNullOrEmpty(text))
@@ -903,48 +933,133 @@ public static partial class StringExtensions
         }
 
         return sb.ToString();
-    }    
+    }
 
+    /// <summary>
+    /// Extracts all numeric characters from the string and attempts to parse them into a <see cref="byte"/>.
+    /// </summary>
+    /// <param name="text">The source string containing numbers.</param>
+    /// <param name="result">When this method returns, contains the parsed 8-bit unsigned integer value if successful.</param>
+    /// <returns><see langword="true"/> if the numbers were successfully parsed; otherwise, <see langword="false"/>.</returns>
+    /// <example>
+    /// <code>
+    /// "Age: 42".TryParseNumbers(out byte res); // returns true, res = 42
+    /// </code>
+    /// </example>
     public static bool TryParseNumbers(this string text, out byte result)
     {
         return TryParseNumbersInternal(text, out result);
     }
 
+    /// <summary>
+    /// Extracts all numeric characters from the string and attempts to parse them into a <see cref="short"/>.
+    /// </summary>
+    /// <param name="text">The source string containing numbers.</param>
+    /// <param name="result">When this method returns, contains the parsed 16-bit signed integer value if successful.</param>
+    /// <returns><see langword="true"/> if the numbers were successfully parsed; otherwise, <see langword="false"/>.</returns>
+    /// <example>
+    /// <code>
+    /// "ID-1200".TryParseNumbers(out short res); // returns true, res = 1200
+    /// </code>
+    /// </example>
     public static bool TryParseNumbers(this string text, out short result)
     {
         return TryParseNumbersInternal(text, out result);
     }
 
+    /// <summary>
+    /// Extracts all numeric characters from the string and attempts to parse them into an <see cref="int"/>.
+    /// </summary>
+    /// <param name="text">The source string containing numbers.</param>
+    /// <param name="result">When this method returns, contains the parsed 32-bit signed integer value if successful.</param>
+    /// <returns><see langword="true"/> if the numbers were successfully parsed; otherwise, <see langword="false"/>.</returns>
+    /// <example>
+    /// <code>
+    /// "Code_84291!".TryParseNumbers(out int res); // returns true, res = 84291
+    /// </code>
+    /// </example>
     public static bool TryParseNumbers(this string text, out int result)
     {
         return TryParseNumbersInternal(text, out result);
     }
 
+    /// <summary>
+    /// Extracts all numeric characters from the string and attempts to parse them into a <see cref="long"/>.
+    /// </summary>
+    /// <param name="text">The source string containing numbers.</param>
+    /// <param name="result">When this method returns, contains the parsed 64-bit signed integer value if successful.</param>
+    /// <returns><see langword="true"/> if the numbers were successfully parsed; otherwise, <see langword="false"/>.</returns>
+    /// <example>
+    /// <code>
+    /// "Doc-99999999999".TryParseNumbers(out long res); // returns true, res = 99999999999
+    /// </code>
+    /// </example>
     public static bool TryParseNumbers(this string text, out long result)
     {
         return TryParseNumbersInternal(text, out result);
     }
 
+    /// <summary>
+    /// Extracts all numeric characters from the string and attempts to parse them into an <see cref="sbyte"/>.
+    /// </summary>
+    /// <param name="text">The source string containing numbers.</param>
+    /// <param name="result">When this method returns, contains the parsed 8-bit signed integer value if successful.</param>
+    /// <returns><see langword="true"/> if the numbers were successfully parsed; otherwise, <see langword="false"/>.</returns>
     public static bool TryParseNumbers(this string text, out sbyte result)
     {
         return TryParseNumbersInternal(text, out result);
     }
 
+    /// <summary>
+    /// Extracts all numeric characters from the string and attempts to parse them into a <see cref="ushort"/>.
+    /// </summary>
+    /// <param name="text">The source string containing numbers.</param>
+    /// <param name="result">When this method returns, contains the parsed 16-bit unsigned integer value if successful.</param>
+    /// <returns><see langword="true"/> if the numbers were successfully parsed; otherwise, <see langword="false"/>.</returns>
     public static bool TryParseNumbers(this string text, out ushort result)
     {
         return TryParseNumbersInternal(text, out result);
     }
 
+    /// <summary>
+    /// Extracts all numeric characters from the string and attempts to parse them into a <see cref="uint"/>.
+    /// </summary>
+    /// <param name="text">The source string containing numbers.</param>
+    /// <param name="result">When this method returns, contains the parsed 32-bit unsigned integer value if successful.</param>
+    /// <returns><see langword="true"/> if the numbers were successfully parsed; otherwise, <see langword="false"/>.</returns>
     public static bool TryParseNumbers(this string text, out uint result)
     {
         return TryParseNumbersInternal(text, out result);
     }
 
+    /// <summary>
+    /// Extracts all numeric characters from the string and attempts to parse them into a <see cref="ulong"/>.
+    /// </summary>
+    /// <param name="text">The source string containing numbers.</param>
+    /// <param name="result">When this method returns, contains the parsed 64-bit unsigned integer value if successful.</param>
+    /// <returns><see langword="true"/> if the numbers were successfully parsed; otherwise, <see langword="false"/>.</returns>
     public static bool TryParseNumbers(this string text, out ulong result)
     {
         return TryParseNumbersInternal(text, out result);
     }
 
+    /// <summary>
+    /// Extracts numbers and the first matching decimal separator (<c>,</c> or <c>.</c>) from the text, 
+    /// parsing the resulting sequence into a single-precision floating-point number (<see cref="float"/>).
+    /// </summary>
+    /// <remarks>
+    /// The method normalizes commas to dots and ignores any extra punctuation after the first decimal fraction block is captured.
+    /// It avoids heap allocations for inputs up to 128 characters using a stack-allocated buffer.
+    /// </remarks>
+    /// <param name="text">The alphanumeric string containing the target fractional representation.</param>
+    /// <param name="result">When this method returns, contains the parsed float value if successful.</param>
+    /// <returns><see langword="true"/> if a valid float structure was extracted and successfully matched; otherwise, <see langword="false"/>.</returns>
+    /// <example>
+    /// <code>
+    /// "Value: 12,34$".TryParseFloat(out float res); // returns true, res = 12.34f
+    /// "Weight: 1.5kg".TryParseFloat(out float res); // returns true, res = 1.5f
+    /// </code>
+    /// </example>
     public static bool TryParseFloat(this string text, out float result)
     {
         result = 0f;
@@ -981,6 +1096,22 @@ public static partial class StringExtensions
         return float.TryParse(buffer[..bufferIndex], NumberStyles.Float, CultureInfo.InvariantCulture, out result);
     }
 
+    /// <summary>
+    /// Extracts numbers and the first matching decimal separator (<c>,</c> or <c>.</c>) from the text, 
+    /// parsing the resulting sequence into a double-precision floating-point number (<see cref="double"/>).
+    /// </summary>
+    /// <remarks>
+    /// The method normalizes commas to dots and ignores any extra punctuation after the first decimal fraction block is captured.
+    /// It avoids heap allocations for inputs up to 256 characters using a stack-allocated buffer.
+    /// </remarks>
+    /// <param name="text">The alphanumeric string containing the target fractional representation.</param>
+    /// <param name="result">When this method returns, contains the parsed double value if successful.</param>
+    /// <returns><see langword="true"/> if a valid double structure was extracted and successfully matched; otherwise, <see langword="false"/>.</returns>
+    /// <example>
+    /// <code>
+    /// "Lat: -23.5505".TryParseDouble(out double res); // returns true, res = 23.5505d
+    /// </code>
+    /// </example>
     public static bool TryParseDouble(this string text, out double result)
     {
         result = 0d;
@@ -1016,6 +1147,22 @@ public static partial class StringExtensions
         return double.TryParse(buffer[..bufferIndex], NumberStyles.Float, CultureInfo.InvariantCulture, out result);
     }
 
+    /// <summary>
+    /// Extracts numbers and the first matching decimal separator (<c>,</c> or <c>.</c>) from the text, 
+    /// parsing the resulting sequence into a high-precision decimal number (<see cref="decimal"/>).
+    /// </summary>
+    /// <remarks>
+    /// The method normalizes commas to dots and ignores any extra punctuation after the first decimal fraction block is captured.
+    /// It avoids heap allocations for inputs up to 256 characters using a stack-allocated buffer.
+    /// </remarks>
+    /// <param name="text">The alphanumeric string containing the target fractional representation.</param>
+    /// <param name="result">When this method returns, contains the parsed decimal value if successful.</param>
+    /// <returns><see langword="true"/> if a valid decimal structure was extracted and successfully matched; otherwise, <see langword="false"/>.</returns>
+    /// <example>
+    /// <code>
+    /// "Price: R$ 1250,45".TryParseDecimal(out decimal res); // returns true, res = 1250.45m
+    /// </code>
+    /// </example>
     public static bool TryParseDecimal(this string text, out decimal result)
     {
         result = 0m;
@@ -1566,6 +1713,13 @@ public static partial class StringExtensions
 
     #region Private
 
+    /// <summary>
+    /// General unmanaged conversion internal block used by overloads of TryParseNumbers to scan raw character spans.
+    /// </summary>
+    /// <typeparam name="T">The type constraints mapping to a structural integral native number.</typeparam>
+    /// <param name="text">The raw alphanumeric sequence containing potential integers.</param>
+    /// <param name="result">The out parameter mapped via memory references to output type.</param>
+    /// <returns>True if digits were isolated and successfully evaluated into the scalar data width, otherwise false.</returns>
     private static bool TryParseNumbersInternal<T>(string text, out T result) where T : struct
     {
         result = default!;
